@@ -10,7 +10,7 @@ namespace CorsoCoreGabriel.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Sono index della Home");
+            return View();
         }
     }
 }
