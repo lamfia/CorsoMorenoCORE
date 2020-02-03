@@ -31,8 +31,8 @@ namespace CorsoCoreGabriel
             //app.UseMvcWithDefaultRoute();
             app.UseMvc(routebuilder=>
             {
-                //courses/detail/5
-                routebuilder.MapRoute("default","{controller}/{action}/{id?}");
+                //courses/detail/5   
+                routebuilder.MapRoute("default","{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
