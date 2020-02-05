@@ -10,7 +10,8 @@ namespace CorsoCoreGabriel.Controllers
     {
         public IActionResult Index()
         {
+            //return Content("Hola Gabriel");
             return View();
-        }
+        } 
     }
 }
