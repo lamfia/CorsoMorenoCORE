@@ -1,5 +1,26 @@
-﻿
-<h1>Index Courses</h1>
+﻿<h1>Catalogo dei corsi<</h1>
 
-<p>Sono l'index di Courses holas</p>
-<a asp-action="Detail" asp-route-id="5">Dettaglio Corso 5</a>
+
+    <div class="row">
+        <div class="col-md-1">
+            <img src="~/logo.svg" width="50">
+        </div>
+        <div class="col-md-5">
+            Titolo del corso
+            di nome autore
+        </div>
+        <div class="col-md-2">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+        </div>
+        <div class="col-md-2">
+            EUR 10,99 <br/> <s>EUR 12,99</s>
+        </div>
+        <div class="col-md-2">
+            <a class="btn btn-outline-primary" asp-action="Detail" asp-route-id="5">Dettaglio Corso 5</a>
+        </div>
+    </div>
+
