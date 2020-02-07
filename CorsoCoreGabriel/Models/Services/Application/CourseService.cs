@@ -21,10 +21,8 @@ namespace CorsoCoreGabriel.Models.Services.Application
                     CurrentPrice= rand.NextDouble(),
                     FullPrice=rand.NextDouble(),
                     Author="Nome Cognome",
-                    Rating=rand.NextDouble(),
-                    ImagePath="~/logo.svg"
-
-
+                    Rating=rand.Next(0,5),
+                    ImagePath="~/logo.svg" 
                 };
                 courseList.Add(course);
             }
