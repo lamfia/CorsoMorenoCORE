@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using CorsoCoreGabriel.Models.Services.Application;
+using CorsoCoreGabriel.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CorsoCoreGabriel.Controllers
 {
@@ -6,7 +9,9 @@ namespace CorsoCoreGabriel.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            var courseService = new CourseService();
+            List<CourseViewModel> courses= courseService.GetCourses();
+            return View(courses);
         }
 
         public IActionResult Detail(string id)

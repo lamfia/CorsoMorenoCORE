@@ -1,6 +1,9 @@
-﻿<h1>Catalogo dei corsi</h1>
+﻿@model List<CourseViewModel>
+<h1>Catalogo dei corsi</h1>
 
-@for (int i=0;i<2;i++){
+
+@foreach (CourseViewModel course in Model)
+{
     <div class="row">
         <div class="col-md-1">
             <img src="~/logo.svg" width="50">
