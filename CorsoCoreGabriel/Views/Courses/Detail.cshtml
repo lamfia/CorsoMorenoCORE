@@ -1,4 +1,83 @@
-﻿
-<h1>Detail</h1>
-<p> Sono la view de detail del controller</p>
-!
+﻿@model CourseDetailViewModel
+
+<div class="course-info mt-2">
+
+
+
+    <div class="row">
+
+        <div class="col-md-9">
+            <h1>@Model.Title</h1>
+        </div>
+        <div class="col-md-3 justify-content-center">
+            <a href="#" class="btn btn-warning btn-block">Iscriviti</a>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+
+            @Model.Description
+
+        </div>
+
+        <div class="col-md-3">
+
+            <aside>
+                <author>@Model.Author</author>
+                <div class="rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (Model.Rating >= i)
+                        {
+                            <i class="fas fa-star"></i>
+
+                        }
+                        else if (Model.Rating > i - 1)
+                        {
+
+                            <i class="fas fa-star-half-alt"></i>
+                        }
+                        else
+                        {
+                            <i class="far fa-star"></i>
+                        }
+                    }
+                </div>
+
+                <div class="price">@Model.CurrentPrice <br /> </div>
+
+                <img src="@Model.ImagePath" />
+
+            </aside>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div>
+    <h2>Lezioni</h2>
+
+    @foreach (var item in Model.Lessons)
+    {
+        <hr />
+        <div class="row">
+
+            <div class="col-md-9 text-left">@item.Title</div>
+            <div class="col-md-3 text-right"> <i class="far fa-clock"> </i> durazione @item.Duration.ToString("m'm 's's'")</div>
+
+        </div>
+    }
+
+    <hr />
+    <div class="row">
+
+        <div class="col-md-9 text-left">Totale</div>
+        <div class="col-md-3 text-right"> <i class="far fa-clock"> </i> durazione @Model.TotalCourseDuration.ToString("m'm 's's'") </div>
+
+    </div>
+</div>

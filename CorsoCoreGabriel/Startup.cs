@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CorsoCoreGabriel.Models.Services.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,22 @@ namespace CorsoCoreGabriel
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+
+            //AddTransient
+            //Per servizi veloci 
+            //Crea instanza e la distrugge dopo un po'
+            services.AddTransient<ICourseService, CourseService>();
+
+            //AddScoped
+            //Per servizi costoso da costruire (pesato)
+            //Crea instanza ma non la distrugge 
+            //services.AddScoped<ICourseService, CourseService>();
+
+            //AddSingleton
+            //Servizi che funzionano fuori della richiesta http e si usa SOLO UNA istanza
+            //esempio: emailservice, 1 richiesta di email alla volta
+            //Attenzione non è thread safe
+            //services.AddSingleton<ICourseService, CourseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -29,10 +46,10 @@ namespace CorsoCoreGabriel
             app.UseStaticFiles();
 
             //app.UseMvcWithDefaultRoute();
-            app.UseMvc(routebuilder=>
+            app.UseMvc(routebuilder =>
             {
                 //courses/detail/5   
-                routebuilder.MapRoute("default","{controller=Home}/{action=Index}/{id?}");
+                routebuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
