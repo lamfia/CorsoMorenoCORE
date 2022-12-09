@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CorsoCoreGabriel.Models.Services.Application;
+using CorsoCoreGabriel.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +22,9 @@ namespace CorsoCoreGabriel
             //AddTransient
             //Per servizi veloci 
             //Crea instanza e la distrugge dopo un po'
-            services.AddTransient<ICourseService, CourseService>();
+            services.AddTransient<ICourseService, AdoNetCourseService>();
+
+            services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
 
             //AddScoped
             //Per servizi costoso da costruire (pesato)
