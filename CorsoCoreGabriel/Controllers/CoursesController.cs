@@ -2,6 +2,7 @@
 using CorsoCoreGabriel.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CorsoCoreGabriel.Controllers
 {
@@ -14,19 +15,18 @@ namespace CorsoCoreGabriel.Controllers
             this.courseService = courseService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-      
 
-            List<CourseViewModel> courses = courseService.GetCourses();
+            List<CourseViewModel> courses = await courseService.GetCourses();
 
             return View(courses);
         }
 
-        public IActionResult Detail(int id)
+        public async Task<IActionResult> Detail(int id)
         {
 
-            var viewModel= courseService.GetCourse(id);
+            CourseDetailViewModel viewModel = await courseService.GetCourse(id);
 
             return View(viewModel);
 

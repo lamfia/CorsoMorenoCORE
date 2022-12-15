@@ -1,0 +1,6 @@
+﻿
+
+SCAFFOLDING DA PM
+
+Scaffold-DbContext 'Data Source=Data/MyCourse.db' Microsoft.EntityFrameworkCore.Sqlite  -OutputDir Models/Entities
+-ContextDir Models/Services/Infrastructure  -context MyCourseDbContext

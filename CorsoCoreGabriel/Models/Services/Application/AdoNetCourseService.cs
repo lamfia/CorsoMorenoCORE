@@ -17,11 +17,11 @@ namespace CorsoCoreGabriel.Models.Services.Application
             this.db = db;
         }
 
-        public CourseDetailViewModel GetCourse(int id)
+        public async Task<CourseDetailViewModel> GetCourse(int id)
         {
-            string query = "SELECT * FROM Courses where Id=" + id +" ; SELECT * FROM Lessons where CourseId="+ id;
+            FormattableString query = $"SELECT * FROM Courses where Id={id} ; SELECT * FROM Lessons where CourseId={id}";
 
-            DataSet dataSet = db.Query(query);
+            DataSet dataSet = await db.Query(query);
 
             //Course
             var dt = dataSet.Tables[0];
@@ -30,7 +30,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
                 throw new InvalidOperationException("not 1 row from course " + id);
             }
             var courseRow = dt.Rows[0];
-            var courseDetailViewModel =  CourseDetailViewModel.FromDataRow(courseRow);
+            var courseDetailViewModel = CourseDetailViewModel.FromDataRow(courseRow);
 
             //Lessons
             var lessonDataTable = dataSet.Tables[1];
@@ -44,11 +44,11 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public List<CourseViewModel> GetCourses()
+        public async Task<List<CourseViewModel>> GetCourses()
         {
-            string query = "SELECT * FROM Courses";
+            FormattableString query = $"SELECT * FROM Courses";
 
-            DataSet dataSet = db.Query(query);
+            DataSet dataSet = await db.Query(query);
 
             var datatable = dataSet.Tables[0];
 

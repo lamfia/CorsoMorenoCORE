@@ -9,18 +9,34 @@ namespace CorsoCoreGabriel.Models.Services.Infrastructure
 {
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
-        public DataSet Query(string query)
+        public async Task<DataSet> Query(FormattableString Formattablequery)
         {
 
+            var queryArguments = Formattablequery.GetArguments();
+
+            var sqliparameters = new List<SqliteParameter>();
+
+
+            for (int i = 0; i < queryArguments.Length; i++)
+            {
+                var parameter = new SqliteParameter(i.ToString(), queryArguments[i]);
+                sqliparameters.Add(parameter);
+                queryArguments[i] = "@" + i;
+            }
+
+            var query = Formattablequery.ToString();
 
             using (var conn = new SqliteConnection("Data Source=Data/MyCourse.db"))
             {
-                conn.Open();
+
+
+                await conn.OpenAsync();
 
                 using (var cmd = new SqliteCommand(query, conn))
                 {
+                    cmd.Parameters.AddRange(sqliparameters);
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
 
                         var dataSet = new DataSet();
