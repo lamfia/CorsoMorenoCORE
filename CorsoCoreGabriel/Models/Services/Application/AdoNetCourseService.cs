@@ -17,7 +17,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
             this.db = db;
         }
 
-        public async Task<CourseDetailViewModel> GetCourse(int id)
+        public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
             FormattableString query = $"SELECT * FROM Courses where Id={id} ; SELECT * FROM Lessons where CourseId={id}";
 
@@ -44,7 +44,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCourses()
+        public async Task<List<CourseViewModel>> GetCoursesAsync()
         {
             FormattableString query = $"SELECT * FROM Courses";
 

@@ -8,8 +8,8 @@ namespace CorsoCoreGabriel.Models.Services.Application
 {
     public interface ICourseService
     {
-        Task<List<CourseViewModel>> GetCourses();
+        Task<List<CourseViewModel>> GetCoursesAsync();
 
-        Task<CourseDetailViewModel> GetCourse(int id);
+        Task<CourseDetailViewModel> GetCourseAsync(int id);
     }
 }

@@ -18,7 +18,7 @@ namespace CorsoCoreGabriel.Controllers
         public async Task<IActionResult> Index()
         {
 
-            List<CourseViewModel> courses = await courseService.GetCourses();
+            List<CourseViewModel> courses = await courseService.GetCoursesAsync();
 
             return View(courses);
         }
@@ -26,7 +26,7 @@ namespace CorsoCoreGabriel.Controllers
         public async Task<IActionResult> Detail(int id)
         {
 
-            CourseDetailViewModel viewModel = await courseService.GetCourse(id);
+            CourseDetailViewModel viewModel = await courseService.GetCourseAsync(id);
 
             return View(viewModel);
 

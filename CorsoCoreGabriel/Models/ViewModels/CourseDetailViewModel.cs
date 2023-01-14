@@ -1,4 +1,5 @@
-﻿using CorsoCoreGabriel.Models.Enums;
+﻿using CorsoCoreGabriel.Models.Entities;
+using CorsoCoreGabriel.Models.Enums;
 using CorsoCoreGabriel.Models.ValueTypes;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,27 @@ namespace CorsoCoreGabriel.Models.ViewModels
 
             };
             return courseViewModel;
+        }
+
+        public static new CourseDetailViewModel FromEntity(Course course)
+        {
+            var courseDetailViewModel = new CourseDetailViewModel
+            {
+                Id = course.Id,
+                Title = course.Title,
+                Description = course.Description,
+                Author = course.Author,
+                ImagePath = course.ImagePath,
+                Rating = course.Rating,
+                CurrentPrice = course.CurrentPrice,
+                FullPrice = course.FullPrice,
+                Lessons=course.Lessons.Select(lesson=> new LessonViewModel { 
+                    Title=lesson.Title,
+                    Duration=lesson.Duration
+                }).ToList()
+
+            };
+            return courseDetailViewModel;
         }
     }
 }
