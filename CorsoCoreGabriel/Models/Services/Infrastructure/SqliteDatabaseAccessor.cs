@@ -3,12 +3,24 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using CorsoCoreGabriel.Models.Options;
 using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace CorsoCoreGabriel.Models.Services.Infrastructure
 {
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
+        public IOptionsMonitor<ConnectionStringsOptions> Connectionstringsoptions { get; }
+
+
+        public SqliteDatabaseAccessor(IOptionsMonitor<ConnectionStringsOptions> connectionstringsoptions)
+        {
+            Connectionstringsoptions = connectionstringsoptions;
+        }
+
+
         public async Task<DataSet> Query(FormattableString Formattablequery)
         {
 
@@ -26,7 +38,7 @@ namespace CorsoCoreGabriel.Models.Services.Infrastructure
 
             var query = Formattablequery.ToString();
 
-            using (var conn = new SqliteConnection("Data Source=Data/MyCourse.db"))
+            using (var conn = new SqliteConnection(Connectionstringsoptions.CurrentValue.Default))
             {
 
 

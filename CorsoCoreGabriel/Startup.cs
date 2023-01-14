@@ -2,18 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CorsoCoreGabriel.Models.Options;
 using CorsoCoreGabriel.Models.Services.Application;
 using CorsoCoreGabriel.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CorsoCoreGabriel
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -23,8 +32,8 @@ namespace CorsoCoreGabriel
             //AddTransient
             //Per servizi veloci 
             //Crea instanza e la distrugge dopo un po'
-           //services.AddTransient<ICourseService, AdoNetCourseService>();
-            services.AddTransient<ICourseService, EfCoreCourseService>();
+            services.AddTransient<ICourseService, AdoNetCourseService>();
+            //services.AddTransient<ICourseService, EfCoreCourseService>();
 
             services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
 
@@ -44,13 +53,17 @@ namespace CorsoCoreGabriel
 
             //usare questo che fa un log in comando
             //services.AddDbContext<MyCourseDbContext>();
-            services.AddDbContextPool<MyCourseDbContext>(optionsBuilder => {
-
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlite("Data Source=Data/MyCourse.db");
+            services.AddDbContextPool<MyCourseDbContext>(optionsBuilder =>
+            {
+                string configurationString = Configuration.GetConnectionString("Default");
+                optionsBuilder.UseSqlite(configurationString);
 
             });
 
+
+            //Options
+            services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
+            services.Configure<CoursesOptions>(Configuration.GetSection("CoursesOptions"));
 
 
 

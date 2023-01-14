@@ -1,5 +1,7 @@
-﻿using CorsoCoreGabriel.Models.Services.Infrastructure;
+﻿using CorsoCoreGabriel.Models.Options;
+using CorsoCoreGabriel.Models.Services.Infrastructure;
 using CorsoCoreGabriel.Models.ViewModels;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,9 +13,11 @@ namespace CorsoCoreGabriel.Models.Services.Application
     public class AdoNetCourseService : ICourseService
     {
         private readonly IDatabaseAccessor db;
+        private readonly IOptionsMonitor<CoursesOptions> coursesoptions;
 
-        public AdoNetCourseService(IDatabaseAccessor db)
+        public AdoNetCourseService(IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
         {
+            this.coursesoptions = coursesoptions;
             this.db = db;
         }
 
