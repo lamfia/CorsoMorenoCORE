@@ -6,23 +6,27 @@ using System.Threading.Tasks;
 using CorsoCoreGabriel.Models.Options;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace CorsoCoreGabriel.Models.Services.Infrastructure
 {
     public class SqliteDatabaseAccessor : IDatabaseAccessor
     {
+        public ILogger<SqliteDatabaseAccessor> Logger { get; }
         public IOptionsMonitor<ConnectionStringsOptions> Connectionstringsoptions { get; }
 
 
-        public SqliteDatabaseAccessor(IOptionsMonitor<ConnectionStringsOptions> connectionstringsoptions)
+        public SqliteDatabaseAccessor(ILogger<SqliteDatabaseAccessor> logger, IOptionsMonitor<ConnectionStringsOptions> connectionstringsoptions)
         {
+            Logger = logger;
             Connectionstringsoptions = connectionstringsoptions;
         }
 
 
         public async Task<DataSet> Query(FormattableString Formattablequery)
         {
+            this.Logger.LogInformation(Formattablequery.Format, Formattablequery.GetArguments());
 
             var queryArguments = Formattablequery.GetArguments();
 

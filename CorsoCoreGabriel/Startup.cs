@@ -33,6 +33,7 @@ namespace CorsoCoreGabriel
             //Per servizi veloci 
             //Crea instanza e la distrugge dopo un po'
             services.AddTransient<ICourseService, AdoNetCourseService>();
+
             //services.AddTransient<ICourseService, EfCoreCourseService>();
 
             services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
@@ -64,7 +65,6 @@ namespace CorsoCoreGabriel
             //Options
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<CoursesOptions>(Configuration.GetSection("CoursesOptions"));
-
 
 
         }

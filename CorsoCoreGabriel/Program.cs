@@ -19,6 +19,10 @@ namespace CorsoCoreGabriel
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+            .ConfigureLogging((context, builder) =>
+            {
+                //builder.Add PER aggiungere altri provider di log
+            })
                 .UseStartup<Startup>();
     }
 }

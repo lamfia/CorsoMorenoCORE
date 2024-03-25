@@ -1,6 +1,7 @@
 ﻿using CorsoCoreGabriel.Models.Options;
 using CorsoCoreGabriel.Models.Services.Infrastructure;
 using CorsoCoreGabriel.Models.ViewModels;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,22 @@ namespace CorsoCoreGabriel.Models.Services.Application
         private readonly IDatabaseAccessor db;
         private readonly IOptionsMonitor<CoursesOptions> coursesoptions;
 
-        public AdoNetCourseService(IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
+        private ILogger<AdoNetCourseService> logger { get; }
+
+        public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
         {
             this.coursesoptions = coursesoptions;
+            this.logger = logger;
             this.db = db;
         }
 
+
+
         public async Task<CourseDetailViewModel> GetCourseAsync(int id)
         {
+
+            logger.LogInformation("Course {id} requested", id);
+
             FormattableString query = $"SELECT * FROM Courses where Id={id} ; SELECT * FROM Lessons where CourseId={id}";
 
             DataSet dataSet = await db.Query(query);
