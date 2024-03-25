@@ -1,4 +1,5 @@
-﻿using CorsoCoreGabriel.Models.Options;
+﻿using CorsoCoreGabriel.Models.Exceptions;
+using CorsoCoreGabriel.Models.Options;
 using CorsoCoreGabriel.Models.Services.Infrastructure;
 using CorsoCoreGabriel.Models.ViewModels;
 using Microsoft.Extensions.Logging;
@@ -40,7 +41,8 @@ namespace CorsoCoreGabriel.Models.Services.Application
             var dt = dataSet.Tables[0];
             if (dt.Rows.Count != 1)
             {
-                throw new InvalidOperationException("not 1 row from course " + id);
+                logger.LogWarning("Course id: {id} not found", id);
+                throw new CourseNotFoundException(id);
             }
             var courseRow = dt.Rows[0];
             var courseDetailViewModel = CourseDetailViewModel.FromDataRow(courseRow);
