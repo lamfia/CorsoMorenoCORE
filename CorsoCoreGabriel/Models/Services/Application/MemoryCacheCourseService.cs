@@ -35,14 +35,14 @@ namespace CorsoCoreGabriel.Models.Services.Application
                 });
         }
 
-        public Task<List<CourseViewModel>> GetCoursesAsync()
+        public Task<List<CourseViewModel>> GetCoursesAsync(string search)
         {
             return MemoryCache.GetOrCreateAsync(
-              $"Courses", cacheEntry =>
+              $"Courses{search}", cacheEntry =>
               {
                   cacheEntry.SetSize(2);
                   cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Options.CurrentValue.SecondsCache));
-                  return courseService.GetCoursesAsync();
+                  return courseService.GetCoursesAsync(search);
               });
         }
     }

@@ -15,10 +15,10 @@ namespace CorsoCoreGabriel.Controllers
             this.courseService = courseService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, int page, string orderby, bool ascending)
         {
 
-            List<CourseViewModel> courses = await courseService.GetCoursesAsync();
+            List<CourseViewModel> courses = await courseService.GetCoursesAsync(search);
 
             return View(courses);
         }

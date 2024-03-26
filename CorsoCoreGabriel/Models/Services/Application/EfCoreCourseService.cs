@@ -35,9 +35,12 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return viewmodel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync()
+        public async Task<List<CourseViewModel>> GetCoursesAsync(string search)
         {
+            search = search ?? "";
+
             IQueryable<CourseViewModel> querylinq = dbContext.Courses
+                .Where(x => x.Title.Contains(search))
                 .AsNoTracking()
                 .Select(course => CourseViewModel.FromEntity(course));
 

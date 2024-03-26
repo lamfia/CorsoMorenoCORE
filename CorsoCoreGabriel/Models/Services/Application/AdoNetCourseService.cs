@@ -21,7 +21,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
         public IMemoryCache MemoryCache { get; }
         private ILogger<AdoNetCourseService> logger { get; }
 
-        public AdoNetCourseService(IMemoryCache memoryCache,ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
+        public AdoNetCourseService(IMemoryCache memoryCache, ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
         {
             this.coursesoptions = coursesoptions;
             MemoryCache = memoryCache;
@@ -62,9 +62,10 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync()
+        public async Task<List<CourseViewModel>> GetCoursesAsync(string search)
         {
-            FormattableString query = $"SELECT * FROM Courses";
+          
+            FormattableString query = $"SELECT * FROM Courses WHERE Title LIKE {"%" + search + "%"}";
 
             DataSet dataSet = await db.QueryAsync(query);
 
