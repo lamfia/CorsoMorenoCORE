@@ -29,6 +29,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return MemoryCache.GetOrCreateAsync(
                 $"Course{id}", cacheEntry =>
                 {
+                    cacheEntry.SetSize(1);
                     cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Options.CurrentValue.SecondsCache));
                     return courseService.GetCourseAsync(id);
                 });
@@ -39,6 +40,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return MemoryCache.GetOrCreateAsync(
               $"Courses", cacheEntry =>
               {
+                  cacheEntry.SetSize(2);
                   cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Options.CurrentValue.SecondsCache));
                   return courseService.GetCoursesAsync();
               });
