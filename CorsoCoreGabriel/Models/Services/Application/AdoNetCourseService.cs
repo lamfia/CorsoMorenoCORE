@@ -2,6 +2,7 @@
 using CorsoCoreGabriel.Models.Options;
 using CorsoCoreGabriel.Models.Services.Infrastructure;
 using CorsoCoreGabriel.Models.ViewModels;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -12,16 +13,18 @@ using System.Threading.Tasks;
 
 namespace CorsoCoreGabriel.Models.Services.Application
 {
-    public class AdoNetCourseService : ICourseService
+    public class AdoNetCourseService : ICachedCourseService
     {
         private readonly IDatabaseAccessor db;
         private readonly IOptionsMonitor<CoursesOptions> coursesoptions;
 
+        public IMemoryCache MemoryCache { get; }
         private ILogger<AdoNetCourseService> logger { get; }
 
-        public AdoNetCourseService(ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
+        public AdoNetCourseService(IMemoryCache memoryCache,ILogger<AdoNetCourseService> logger, IDatabaseAccessor db, IOptionsMonitor<CoursesOptions> coursesoptions)
         {
             this.coursesoptions = coursesoptions;
+            MemoryCache = memoryCache;
             this.logger = logger;
             this.db = db;
         }
@@ -35,7 +38,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
 
             FormattableString query = $"SELECT * FROM Courses where Id={id} ; SELECT * FROM Lessons where CourseId={id}";
 
-            DataSet dataSet = await db.Query(query);
+            DataSet dataSet = await db.QueryAsync(query);
 
             //Course
             var dt = dataSet.Tables[0];
@@ -63,7 +66,7 @@ namespace CorsoCoreGabriel.Models.Services.Application
         {
             FormattableString query = $"SELECT * FROM Courses";
 
-            DataSet dataSet = await db.Query(query);
+            DataSet dataSet = await db.QueryAsync(query);
 
             var datatable = dataSet.Tables[0];
 

@@ -8,9 +8,9 @@ namespace CorsoCoreGabriel.Controllers
 {
     public class CoursesController : Controller
     {
-        private readonly ICourseService courseService;
+        private readonly ICachedCourseService courseService;
 
-        public CoursesController(ICourseService courseService)
+        public CoursesController(ICachedCourseService courseService)
         {
             this.courseService = courseService;
         }

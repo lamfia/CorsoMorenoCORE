@@ -8,6 +8,6 @@ namespace CorsoCoreGabriel.Models.Services.Infrastructure
 {
     public interface IDatabaseAccessor
     {
-         Task<DataSet> Query(FormattableString query);
+         Task<DataSet> QueryAsync(FormattableString query);
     }
 }

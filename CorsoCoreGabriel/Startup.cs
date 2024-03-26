@@ -32,11 +32,14 @@ namespace CorsoCoreGabriel
             //AddTransient
             //Per servizi veloci 
             //Crea instanza e la distrugge dopo un po'
+            // services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
             services.AddTransient<ICourseService, AdoNetCourseService>();
+            services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+            services.AddTransient<ICachedCourseService, MemoryCacheCourseService>();
 
             //services.AddTransient<ICourseService, EfCoreCourseService>();
 
-            services.AddTransient<IDatabaseAccessor, SqliteDatabaseAccessor>();
+
 
             //AddScoped
             //Per servizi costoso da costruire (pesato)
@@ -54,6 +57,8 @@ namespace CorsoCoreGabriel
 
             //usare questo che fa un log in comando
             //services.AddDbContext<MyCourseDbContext>();
+
+
             services.AddDbContextPool<MyCourseDbContext>(optionsBuilder =>
             {
                 string configurationString = Configuration.GetConnectionString("Default");
@@ -65,6 +70,7 @@ namespace CorsoCoreGabriel
             //Options
             services.Configure<ConnectionStringsOptions>(Configuration.GetSection("ConnectionStrings"));
             services.Configure<CoursesOptions>(Configuration.GetSection("CoursesOptions"));
+            services.Configure<CacheOptions>(Configuration.GetSection("CacheOptions"));
 
 
         }

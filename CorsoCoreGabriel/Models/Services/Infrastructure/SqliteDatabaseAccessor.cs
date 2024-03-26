@@ -24,7 +24,7 @@ namespace CorsoCoreGabriel.Models.Services.Infrastructure
         }
 
 
-        public async Task<DataSet> Query(FormattableString Formattablequery)
+        public async Task<DataSet> QueryAsync(FormattableString Formattablequery)
         {
             this.Logger.LogInformation(Formattablequery.Format, Formattablequery.GetArguments());
 
