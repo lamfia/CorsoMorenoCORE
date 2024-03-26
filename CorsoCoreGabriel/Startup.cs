@@ -28,6 +28,9 @@ namespace CorsoCoreGabriel
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+
+           // services.AddResponseCaching(); //Response caching di middleware (attenzione, si salva sul server la prima response generata)
+
             services.AddMvc(options =>
             {
                 var homeProfile = new Microsoft.AspNetCore.Mvc.CacheProfile();
@@ -97,6 +100,9 @@ namespace CorsoCoreGabriel
             }
 
             app.UseStaticFiles();
+
+
+            //app.UseResponseCaching(); //Response Caching da middleware
 
             //app.UseMvcWithDefaultRoute();
             app.UseMvc(routebuilder =>
