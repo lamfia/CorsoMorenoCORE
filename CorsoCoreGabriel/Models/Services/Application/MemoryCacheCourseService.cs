@@ -1,4 +1,5 @@
-﻿using CorsoCoreGabriel.Models.Options;
+﻿using CorsoCoreGabriel.Models.InputModel;
+using CorsoCoreGabriel.Models.Options;
 using CorsoCoreGabriel.Models.ViewModels;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -35,15 +36,44 @@ namespace CorsoCoreGabriel.Models.Services.Application
                 });
         }
 
-        public Task<List<CourseViewModel>> GetCoursesAsync(string search)
+        public Task<ListViewModel<CourseViewModel>> GetCoursesAsync(string search, int page, string orderby, bool ascending)
         {
-            return MemoryCache.GetOrCreateAsync(
-              $"Courses{search}", cacheEntry =>
-              {
-                  cacheEntry.SetSize(2);
-                  cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Options.CurrentValue.SecondsCache));
-                  return courseService.GetCoursesAsync(search);
-              });
+            //Solo se sta tra le prime 5 pagine e se non hanno cercato qualcosa
+            bool canCache = page <= 5 && (string.IsNullOrEmpty(search));
+
+            if (canCache)
+            {
+                return MemoryCache.GetOrCreateAsync(
+                  $"Courses{search}-{page}-{orderby}-{ascending}", cacheEntry =>
+                  {
+                      cacheEntry.SetSize(2);
+                      cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(Options.CurrentValue.SecondsCache));
+                      return courseService.GetCoursesAsync(search, page, orderby, ascending);
+                  });
+            }
+
+            //altrimenti si fa la query direttamente e non si mette in cache
+            return courseService.GetCoursesAsync(search, page, orderby, ascending);
+        }
+
+        public Task<List<CourseViewModel>> getBestRatingCourses()
+        {
+            return MemoryCache.GetOrCreateAsync($"BestRatingCourses", cacheEntry =>
+            {
+                cacheEntry.SetSize(2);
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                return courseService.getBestRatingCourses();
+            });
+        }
+
+        public Task<List<CourseViewModel>> getMostRecentCourses()
+        {
+            return MemoryCache.GetOrCreateAsync($"MostRecentCourses", cacheEntry =>
+            {
+                cacheEntry.SetSize(2);
+                cacheEntry.SetAbsoluteExpiration(TimeSpan.FromSeconds(60));
+                return courseService.getMostRecentCourses();
+            });
         }
     }
 }

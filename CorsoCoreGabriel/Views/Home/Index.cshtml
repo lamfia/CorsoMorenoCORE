@@ -1,4 +1,42 @@
-﻿
-<h1>Benvenuto</h1>
+﻿@model HomeViewModel
 
-sono l'index della home
+
+
+
+<div class="jumbotron">
+    <h1 class="display-4">Benvenuto</h1>
+    <p class="lead"> Corsi di formazione</p>
+    <hr class="my-4">
+    <p>Impara diversi corsi per far crescere la tua carriera </p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg " asp-controller="Courses" asp-action="Index" role="button">Corsi</a>
+    </p>
+</div>
+
+<section>
+
+    <h2>
+        Aggiunti di recente
+    </h2>
+
+    @foreach (var course in Model.MostRecentCourses)
+    {
+        <partial name="Courses/_CourseLine" model="@course" />
+    }
+
+</section>
+
+
+<section>
+
+    <h2>
+        I migliori di sempre
+    </h2>
+
+    @foreach (var course in Model.BestRatingCourses)
+    {
+        <partial name="Courses/_CourseLine" model="@course" />
+    }
+
+</section>
+

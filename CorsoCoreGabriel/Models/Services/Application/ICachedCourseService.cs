@@ -9,6 +9,6 @@ namespace CorsoCoreGabriel.Models.Services.Application
 {
     public interface ICachedCourseService : ICourseService
     {
-      
+     
     }
 }

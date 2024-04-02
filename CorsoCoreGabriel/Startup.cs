@@ -8,10 +8,12 @@ using CorsoCoreGabriel.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace CorsoCoreGabriel
 {
@@ -29,7 +31,7 @@ namespace CorsoCoreGabriel
         public void ConfigureServices(IServiceCollection services)
         {
 
-           // services.AddResponseCaching(); //Response caching di middleware (attenzione, si salva sul server la prima response generata)
+            // services.AddResponseCaching(); //Response caching di middleware (attenzione, si salva sul server la prima response generata)
 
             services.AddMvc(options =>
             {
@@ -38,7 +40,14 @@ namespace CorsoCoreGabriel
                 Configuration.Bind("ResponseCache:Home", homeProfile);
 
                 options.CacheProfiles.Add("Home", homeProfile);
-            });
+            })
+            .SetCompatibilityVersion(Microsoft.AspNetCore.Mvc.CompatibilityVersion.Version_3_0)
+
+#if DEBUG
+            .AddRazorRuntimeCompilation()
+#endif
+            ;
+
 
             //AddTransient
             //Per servizi veloci 
@@ -86,9 +95,12 @@ namespace CorsoCoreGabriel
             services.Configure<MemoryCacheOptions>(Configuration.GetSection("MemoryCacheOptions"));
         }
 
+
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime lifetime)
         {
+
             //if (env.IsDevelopment())
             if (env.IsEnvironment("Development"))
             {
@@ -101,15 +113,27 @@ namespace CorsoCoreGabriel
 
             app.UseStaticFiles();
 
+            //Configurazione endPoint routing middleware
+            app.UseRouting();
+
 
             //app.UseResponseCaching(); //Response Caching da middleware
 
-            //app.UseMvcWithDefaultRoute();
-            app.UseMvc(routebuilder =>
+
+            app.UseEndpoints(endpoints =>
             {
-                //courses/detail/5   
-                routebuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+
+                // endpoints.MapBlazorHub(); cambiare per blazor esempio
             });
+            ////app.UseMvcWithDefaultRoute();
+            //app.UseMvc(routebuilder =>
+            //{
+            //    //courses/detail/5   
+            //    routebuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            //});
+
+
         }
     }
 }

@@ -2,6 +2,7 @@
 using CorsoCoreGabriel.Models.Options;
 using CorsoCoreGabriel.Models.Services.Infrastructure;
 using CorsoCoreGabriel.Models.ViewModels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using static CorsoCoreGabriel.Models.Services.Infrastructure.SqliteDatabaseAccessor;
 
 namespace CorsoCoreGabriel.Models.Services.Application
 {
@@ -62,10 +64,24 @@ namespace CorsoCoreGabriel.Models.Services.Application
             return courseDetailViewModel;
         }
 
-        public async Task<List<CourseViewModel>> GetCoursesAsync(string search)
+        public async Task<ListViewModel<CourseViewModel>> GetCoursesAsync(string search, int page, string orderby, bool ascending)
         {
-          
-            FormattableString query = $"SELECT * FROM Courses WHERE Title LIKE {"%" + search + "%"}";
+
+
+            int limit = coursesoptions.CurrentValue.PerPage;
+
+            int offset = limit * (page - 1);
+
+            if (orderby == "CurrentPrice")
+            {
+                orderby = "CurrentPrice_Amount";
+            }
+
+            string direction = ascending ? "ASC" : "DESC";
+
+            FormattableString query = $"SELECT * FROM Courses WHERE Title LIKE {"%" + search + "%"} ORDER BY {(Sql)orderby} {(Sql)direction} LIMIT {limit} OFFSET {offset} ; SELECT COUNT(*) FROM Courses WHERE Title LIKE {"%" + search + "%"}  ";
+
+
 
             DataSet dataSet = await db.QueryAsync(query);
 
@@ -80,7 +96,33 @@ namespace CorsoCoreGabriel.Models.Services.Application
 
             }
 
-            return courseList;
+
+            ListViewModel<CourseViewModel> result = new ListViewModel<CourseViewModel>
+            {
+                List = courseList,
+                TotalCount = Convert.ToInt32(dataSet.Tables[1].Rows[0][0])
+            };
+
+            return result;
+        }
+
+        public async Task<List<CourseViewModel>> getBestRatingCourses()
+        {
+
+            var result = await GetCoursesAsync("", 1, "Rating", false);
+
+            return result.List.Take(3).ToList();
+        }
+
+        public async Task<List<CourseViewModel>> getMostRecentCourses()
+        {
+            var result = await GetCoursesAsync("", 1, "Id", false);
+
+            return result.List.Take(3).ToList();
+
         }
     }
+
+
+
 }

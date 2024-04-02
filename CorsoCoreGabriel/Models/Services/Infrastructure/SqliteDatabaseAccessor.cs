@@ -22,6 +22,27 @@ namespace CorsoCoreGabriel.Models.Services.Infrastructure
             Logger = logger;
             Connectionstringsoptions = connectionstringsoptions;
         }
+        public class Sql
+        {
+            private string value;
+
+            public Sql(string value)
+            {
+                this.value = value;
+            }
+
+            public override string ToString()
+            {
+                return value;
+            }
+
+            public static explicit operator Sql(string v)
+            {
+                return new Sql(v);
+            }
+
+            // Aggiungi qui altri metodi e proprietà che desideri
+        }
 
 
         public async Task<DataSet> QueryAsync(FormattableString Formattablequery)
@@ -35,6 +56,11 @@ namespace CorsoCoreGabriel.Models.Services.Infrastructure
 
             for (int i = 0; i < queryArguments.Length; i++)
             {
+                if (queryArguments[i] is Sql)
+                {
+                    continue;
+                }
+
                 var parameter = new SqliteParameter(i.ToString(), queryArguments[i]);
                 sqliparameters.Add(parameter);
                 queryArguments[i] = "@" + i;

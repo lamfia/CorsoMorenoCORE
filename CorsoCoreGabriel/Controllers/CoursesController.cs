@@ -1,4 +1,5 @@
-﻿using CorsoCoreGabriel.Models.Services.Application;
+﻿using CorsoCoreGabriel.Models.InputModel;
+using CorsoCoreGabriel.Models.Services.Application;
 using CorsoCoreGabriel.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -15,13 +16,25 @@ namespace CorsoCoreGabriel.Controllers
             this.courseService = courseService;
         }
 
-        public async Task<IActionResult> Index(string search, int page, string orderby, bool ascending)
+
+
+        public async Task<IActionResult> Index(CourseInputListModel model)
         {
 
-            List<CourseViewModel> courses = await courseService.GetCoursesAsync(search);
+            ListViewModel<CourseViewModel> courses = await courseService.GetCoursesAsync(model.Search, model.Page, model.Orderby, model.Ascending);
 
-            return View(courses);
+      
+
+            var modelOutput = new CoursesListViewModel
+            {
+                Courses = courses,
+                Input = model
+            };
+
+            return View(modelOutput);
         }
+
+
 
         public async Task<IActionResult> Detail(int id)
         {

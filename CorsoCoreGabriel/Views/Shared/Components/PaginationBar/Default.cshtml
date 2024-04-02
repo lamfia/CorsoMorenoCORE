@@ -1,0 +1,70 @@
+﻿@model IPaginationInfo
+
+
+
+@{
+    int totalPages = (int)Math.Ceiling(Model.TotalResults / (decimal)Model.ResultsPerPage);
+
+    int currentPage = Model.CurrentPage;
+}
+<div class="row mt-3">
+
+    <div class="col-md-12">
+
+        <div class="d-flex justify-content-center">
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+
+                    @if (currentPage > 1)
+                    {
+
+                        <li class="page-item">
+                            <a class="page-link" asp-route-page="@(currentPage-1)"
+                               asp-route-search="@Model.Search"
+                               asp-route-orderby="@Model.OrderBy"
+                               asp-route-ascending="@Model.Ascending">Previous</a>
+                        </li>
+                    }
+
+                    @for (int p = Math.Max(1, currentPage - 4); p <= Math.Min(totalPages, currentPage + 4); p++)
+                    {
+                        if (p == currentPage)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" asp-route-page="@p"
+                                   asp-route-search="@Model.Search"
+                                   asp-route-orderby="@Model.OrderBy"
+                                   asp-route-ascending="@Model.Ascending">@p</a>
+                            </li>
+
+                        }
+                        else
+                        {
+                            <li class="page-item ">
+                                <a class="page-link" asp-route-page="@p"
+                                   asp-route-search="@Model.Search"
+                                   asp-route-orderby="@Model.OrderBy"
+                                   asp-route-ascending="@Model.Ascending">@p</a>
+                            </li>
+                        }
+
+                    }
+
+                    @if (currentPage < totalPages)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" asp-route-page="@(currentPage+1)"
+                               asp-route-search="@Model.Search"
+                               asp-route-orderby="@Model.OrderBy"
+                               asp-route-ascending="@Model.Ascending"> Next</a>
+                        </li>
+                    }
+
+
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
